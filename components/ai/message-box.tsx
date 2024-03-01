@@ -8,7 +8,7 @@ import { useChat, type Message } from 'ai/react'
 
 import { type ChatProps } from "./chat"
 
-export function MessageBox({ messages }: ChatProps ) {
+export function MessageBox({ messages, isLoading }: ChatProps ) {
 
     return (
         <>
@@ -29,7 +29,17 @@ export function MessageBox({ messages }: ChatProps ) {
                             )
                         })
                     }
-
+                    {isLoading && (
+                        // Loading skeleton
+                        <div className="animate-pulse">
+                            <div className="grid grid-cols-12 p-2">
+                                <div className="col-span-10"> {/* Adjusted column span */}
+                                    <div className="bg-gray-300 p-4 rounded-md h-24" />
+                                </div>
+                            </div>
+                            {/* Add more skeleton items as needed */}
+                        </div>
+                    )}
                 </div>
             </div>
         </>

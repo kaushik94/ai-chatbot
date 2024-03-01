@@ -16,6 +16,7 @@ export interface ChatProps extends React.ComponentProps<'div'> {
     messages?: Message[]
     id?: string
     chatId?: string | null
+    isLoading?: boolean | null
 }
 
 const uniqueId = () => {
@@ -26,6 +27,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
 
     const [ currentMessage, setCurrentMessage ] = useState('');
     const [ messages, setMessages ] = useState<Message[]>(initialMessages);
+    const [ loading, setLoading ] = useState(false);
 
     const handleChange = (message: string) => {
         setCurrentMessage(message)
@@ -55,7 +57,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
             content: message
         };
         setMessages(prevMessages => [...prevMessages, newMessage])
-
+        setLoading(true);
         // send message to AI API
         // send message to AI API
         const answer = await sendMessageToAIStudio(message);
@@ -66,6 +68,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
                 content: answer
             };
             setMessages(prevMessages => [...prevMessages, AIMessage]);
+            setLoading(false)
         }
     }
     return (
@@ -73,7 +76,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
         <div className="lg:col-span-12 lg:flex">
             <div className='grid w-full gap-2 justify-normal'>
                 {/* <ChatHeader /> */}
-                <MessageBox messages={messages} />
+                <MessageBox messages={messages} isLoading={loading} />
                 <div className='row-span-2'>
                     <ChatInput value={currentMessage} onChangeMessage={handleChange} />
                 </div>

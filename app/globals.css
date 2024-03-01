@@ -84,3 +84,16 @@
 .rocketgraph-chatbot-styling {
 	position: fixed; right: 1rem; z-index: 9999999; border: none; width: 448px; bottom: 5rem; height: 85vh; border-radius: 0.75rem; box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px; display: block;
 }
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
