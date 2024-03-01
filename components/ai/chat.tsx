@@ -67,7 +67,6 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
             };
             setMessages(prevMessages => [...prevMessages, AIMessage]);
         }
-        setCurrentMessage('')
     }
     return (
       <section className="w-full h-full bg-white dark:bg-transparent">
@@ -79,7 +78,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
                     <ChatInput value={currentMessage} onChangeMessage={handleChange} />
                 </div>
                 <div className='row-span-2'>
-                    <Button onClick={(e) => {currentMessage.trim() != '' && sendMessage(currentMessage)}} className='w-full text-white'>Send message</Button>
+                    <Button onClick={(e) => {currentMessage.trim() != '' && sendMessage(currentMessage); setCurrentMessage('')}} className='w-full text-white'>Send message</Button>
                 </div>
             </div>
         </div>                
