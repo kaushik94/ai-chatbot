@@ -61,7 +61,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
             content: message
         };
         initialMessages.push(newMessage)
-        setMessages([...messages, newMessage])
+        setMessages([...initialMessages])
 
         // send message to AI API
         sendMessageToAIStudio(message, (answer: any) => {
@@ -71,7 +71,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
                 content: answer
             };
             initialMessages.push(newAIMessage)
-            setMessages([...messages, newAIMessage])
+            setMessages([...initialMessages])
         })
     }
     return (
