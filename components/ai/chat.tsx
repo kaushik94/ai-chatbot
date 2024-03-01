@@ -25,20 +25,13 @@ const uniqueId = () => {
 export function Chat({ id, initialMessages = [], className, chatId }: ChatProps) {
 
     const [ currentMessage, setCurrentMessage ] = useState('');
-    const [ messages, setMessages ] = useState<Message[]>([]);
-
-
-    useEffect(() => {
-        if (initialMessages) {
-            setMessages(initialMessages)
-        }
-    }, [])
+    const [ messages, setMessages ] = useState<Message[]>(initialMessages);
 
     const handleChange = (message: string) => {
         setCurrentMessage(message)
     }
 
-    const sendMessageToAIStudio = async (message: string, callback: Function) => {
+    const sendMessageToAIStudio = async (message: string) => {
         const API_URL = `${process.env.NEXT_PUBLIC_AI_STUDIO_BASE_URL}/query`;
         const response = await axios.post(
           API_URL,
@@ -47,32 +40,34 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
             query: message
           }
         );
-        console.log(response);
         if (response.status === 200 && response.data) {
           const { answer } = response.data;
-          callback(answer)
+          return answer
         }
+      return '';
     }
 
-    const sendMessage = (message: string) => {
+
+    const sendMessage = async (message: string) => {
         const newMessage : Message = {
             id: uniqueId(),
             role: 'user',
             content: message
         };
-        initialMessages.push(newMessage)
-        setMessages([...initialMessages])
+        setMessages(prevMessages => [...prevMessages, newMessage])
 
         // send message to AI API
-        sendMessageToAIStudio(message, (answer: any) => {
-            const newAIMessage : Message = {
+        // send message to AI API
+        const answer = await sendMessageToAIStudio(message);
+        if (answer !== '') {
+            const AIMessage : Message = {
                 id: uniqueId(),
                 role: 'system',
                 content: answer
             };
-            initialMessages.push(newAIMessage)
-            setMessages([...initialMessages])
-        })
+            setMessages(prevMessages => [...prevMessages, AIMessage]);
+        }
+        setCurrentMessage('')
     }
     return (
       <section className="w-full h-full bg-white dark:bg-transparent">
@@ -84,7 +79,7 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
                     <ChatInput value={currentMessage} onChangeMessage={handleChange} />
                 </div>
                 <div className='row-span-2'>
-                    <Button onClick={(e) => {currentMessage.trim() != '' && sendMessage(currentMessage); setCurrentMessage('')}} className='w-full text-white'>Send message</Button>
+                    <Button onClick={(e) => {currentMessage.trim() != '' && sendMessage(currentMessage)}} className='w-full text-white'>Send message</Button>
                 </div>
             </div>
         </div>                
