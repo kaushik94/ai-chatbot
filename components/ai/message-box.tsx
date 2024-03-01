@@ -9,13 +9,6 @@ import { useChat, type Message } from 'ai/react'
 import { type ChatProps } from "./chat"
 
 export function MessageBox({ messages }: ChatProps ) {
-    const [messages_, setMessages ] = React.useState<Message[]>([])
-
-    React.useEffect(() => {
-        if (messages) {
-            setMessages(messages);
-        }
-    }, [messages])
 
     return (
         <>
@@ -24,7 +17,7 @@ export function MessageBox({ messages }: ChatProps ) {
                     className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col rounded-sm"
                 >
                     {
-                        messages_ && messages_.map((message) => {
+                        messages && messages.map((message) => {
                             return (
                                 <div className="grid grid-cols-12 p-2" key={message.id}>
                                     <div className={`${message.role == 'user' ? 'col-start-3' : ''} col-span-10`}>
