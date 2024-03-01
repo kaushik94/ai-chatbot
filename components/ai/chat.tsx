@@ -8,7 +8,6 @@ import { MessageBox } from "@/components/ai/message-box"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 
 
@@ -27,9 +26,6 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
 
     const [ currentMessage, setCurrentMessage ] = useState('');
     const [ messages, setMessages ] = useState<Message[]>([]);
-    const [ website, setWebsite ] = useState('');
-    const [ name, setName ] = useState('');
-
 
 
     useEffect(() => {
@@ -55,30 +51,6 @@ export function Chat({ id, initialMessages = [], className, chatId }: ChatProps)
         if (response.status === 200 && response.data) {
           const { answer } = response.data;
           callback(answer)
-        }
-    }
-
-    const trainGPT = async () => {
-        const ACTIVATE_API_URL = `${process.env.NEXT_PUBLIC_AI_STUDIO_BASE_URL}/activate`;
-        Cookies.set("website_name", name);
-        const response = await axios.post(
-          ACTIVATE_API_URL,
-          {
-            name: name,
-          }
-        );
-        console.log(response);
-        if (response.status === 200 && response.data) {
-          const { answer } = response.data;
-          const TRAIN_API_URL = `${process.env.NEXT_PUBLIC_AI_STUDIO_BASE_URL}/insert`;
-          const resp = await axios.post(
-            TRAIN_API_URL,
-            {
-              name: name,
-              url: website
-            }
-          );
-          console.log("response: ", resp)
         }
     }
 
